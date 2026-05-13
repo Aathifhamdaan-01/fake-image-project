@@ -17,8 +17,8 @@ detector = load_detector()
 st.title("AI Fake Image Detection")
 
 uploaded_file = st.file_uploader(
-    "Upload Image",
-    type=["png", "jpg", "jpeg"]
+    "Choose an image...",
+    type=["png", "jpg", "jpeg", "jfif"]
 )
 
 if uploaded_file is not None:
@@ -29,4 +29,12 @@ if uploaded_file is not None:
 
     result = detector(image)
 
-    st.write(result)
+    prediction = result[0]
+
+    label = prediction["label"]
+    score = prediction["score"]
+
+    if label == "artificial":
+        st.error(f"AI Generated Image Detected ({score:.2%} confidence)")
+    else:
+        st.success(f"Real Human Image ({score:.2%} confidence)")
